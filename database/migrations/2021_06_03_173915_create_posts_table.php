@@ -20,13 +20,14 @@ class CreatePostsTable extends Migration
             $table->text("text")->nullable();
             $table->boolean("is_turn_of_comment")->default(0);
             $table->boolean("is_turn_of_like")->default(0);
+            $table->softDeletes();
             $table->timestamps();
 
             $table
             ->foreign('user_id')
             ->references('id')
             ->on('users')
-            ->onDelete('restrict');
+            ->onDelete('cascade');
         });
     }
 
