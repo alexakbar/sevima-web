@@ -20,6 +20,15 @@ Route::group(['prefix' => 'v1'], function () {
   Route::group([
         'middleware' => 'auth:api'
     ], function () {
-
+      Route::group(['as' => 'post.', 'prefix' => '/post'], function () {
+        Route::get('/', 'API\Post\PostController@index')->name('index');
+        Route::post('/store', 'API\Post\PostController@store')->name('created');
+        Route::post('/edit/{id}', 'API\Post\PostController@edit')->name('edit');
+        Route::post('/update/{id}', 'API\Post\PostController@update')->name('update');
+        Route::post('/destroy/{id}', 'API\Post\PostController@destroy')->name('destroy');
+        Route::post('/like','API\Post\PostController@Like')->name('like');
+        Route::post('/unlike','API\Post\PostController@UnLike')->name('unlike');
+        Route::post('/comment','API\Post\PostController@Comment')->name('comment');
+      });
   });
 });
