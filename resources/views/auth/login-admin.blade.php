@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Mitsubishi Bagi-Bagi Angpao</title>
+	<title>Sevima</title>
 
   <!-- Global stylesheets -->
 	<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
@@ -14,7 +14,7 @@
 	<link href="{{asset('superuser_asset/assets/css/layout.min.css')}}" rel="stylesheet" type="text/css">
 	<link href="{{asset('superuser_asset/assets/css/components.min.css')}}" rel="stylesheet" type="text/css">
 	<link href="{{asset('superuser_asset/assets/css/colors.min.css')}}" rel="stylesheet" type="text/css">
-	<link rel="shortcut icon" href="{{asset('superuser_asset/assets/img/favicon.png')}}">
+	
 	<link href="{{ asset('superuser_asset/assets/plugins/toastr/toastr.min.css') }}" rel="stylesheet" type="text/css" />
 
 	<!-- /global stylesheets -->
