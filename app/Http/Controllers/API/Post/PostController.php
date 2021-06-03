@@ -19,17 +19,16 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-
       $posts = Post::get();
       $data = [];
       foreach ($posts as $key => $post) {
-        $like = Like::where('user_id',"!=",$request->user()->id)->where('post_id',$post->id)->limit(2)->get();
-        $comment = Comment::where('post_id',$post->id)->with('user')->limit(2)->get();
+        $like = Like::where('user_id',"!=",$post->user_id)->where('post_id',$post->id)->orderBy('created_at','DESC')->limit(2)->get();
+        $comment = Comment::where('post_id',$post->id)->with('user')->orderBy('created_at','DESC')->limit(2)->get();
         $data[] = array(
           'image' => $post->image,
           'text' => $post->text,
           'total_like' => $post->like->count(),
-          'like' => $like,
+          'likers' => $like,
           'total_comment' => $post->comment->count(),
           'comment' => $comment,
         );
@@ -216,6 +215,68 @@ class PostController extends Controller
 
             return response()->json($response, 200);
           }
+        }else{
+          $response['error'] = true;
+          $response['message'] = "Please check your request";
+          return response()->json($response, 400);
+        }
+    }
+
+    public function ListComment(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+          'post_id' => 'required',
+        ]);
+
+        if ($validator->passes()) {
+          $comment =  Comment::where('post_id',$request->post_id)->with('user')->orderBy('created_at','DESC')->get();
+          $response['data'] = $comment;
+          $response['error'] = false;
+          $response['message'] = "Success";
+
+          return response()->json($response, 200);
+        }else{
+          $response['error'] = true;
+          $response['message'] = "Please check your request";
+          return response()->json($response, 400);
+        }
+    }
+
+    public function DestroyComment(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+          'comment_id' => 'required',
+        ]);
+
+        if ($validator->passes()) {
+          $comment =  Comment::find($request->comment_id);
+          if ($comment->delete()) {
+            $response['error'] = false;
+            $response['message'] = "Success";
+
+            return response()->json($response, 200);
+          }
+        }else{
+          $response['error'] = true;
+          $response['message'] = "Please check your request";
+          return response()->json($response, 400);
+        }
+    }
+
+
+    public function ViewAllLike(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+          'post_id' => 'required',
+        ]);
+
+        if ($validator->passes()) {
+          $liker =  Like::where('post_id',$request->post_id)->with('user')->orderBy('created_at','DESC')->get();
+          $response['data'] = $liker;
+          $response['error'] = false;
+          $response['message'] = "Success";
+
+          return response()->json($response, 200);
         }else{
           $response['error'] = true;
           $response['message'] = "Please check your request";

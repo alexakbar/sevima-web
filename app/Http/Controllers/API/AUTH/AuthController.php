@@ -58,7 +58,12 @@ class AuthController extends Controller
         ]);
 
         if ($validator->passes()) {
-
+          $checkingUser = User::where('username',$request->username)->orWhere('email',$request->email)->first();
+          if ($checkingUser) {
+            $response['error'] = true;
+            $response['message'] = "Username or Email already taken";
+            return response()->json($response, 400);
+          }
           $user = new User();
           $user->fullname = $request->fullname;
           $user->username = $request->username;
@@ -75,7 +80,6 @@ class AuthController extends Controller
 
         } else {
             $response['error'] = true;
-            $response['token'] =  null;
             $response['message'] = "Please check your field";
             return response()->json($response, 400);
         }
