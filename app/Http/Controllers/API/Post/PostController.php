@@ -17,9 +17,25 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-      $response['data'] = Post::get();
+
+      $posts = Post::get();
+      $data = [];
+      foreach ($posts as $key => $post) {
+        $like = Like::where('user_id',"!=",$request->user()->id)->where('post_id',$post->id)->limit(2)->get();
+        $comment = Comment::where('post_id',$post->id)->with('user')->limit(2)->get();
+        $data[] = array(
+          'image' => $post->image,
+          'text' => $post->text,
+          'total_like' => $post->like->count(),
+          'like' => $like,
+          'total_comment' => $post->comment->count(),
+          'comment' => $comment,
+        );
+      }
+
+      $response['data'] = $data;
       $response['error'] = false;
       $response['message'] = "Success";
 

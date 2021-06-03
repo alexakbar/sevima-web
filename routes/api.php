@@ -30,5 +30,10 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('/unlike','API\Post\PostController@UnLike')->name('unlike');
         Route::post('/comment','API\Post\PostController@Comment')->name('comment');
       });
+
+      Route::group(['as' => 'profile.', 'prefix' => '/profile'], function () {
+        Route::get('/', 'API\Profile\ProfileController@Profile')->name('profile');
+        Route::get('/gallery', 'API\Profile\ProfileController@Gallery')->name('gallery');
+      });
   });
 });
