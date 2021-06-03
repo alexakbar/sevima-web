@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/login', 'Website\Auth\AuthController@index')->name('auth.index');
+Route::post('/auth', 'Website\Auth\AuthController@dologin')->name('dologin');
+Route::get('/logout', 'Website\Auth\AuthController@logout')->name('logout');
