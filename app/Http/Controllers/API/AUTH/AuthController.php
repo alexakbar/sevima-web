@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\AUTH;
 
-use Illuminate\Http\Request;
 use App\Entities\User;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 
-
-class ApiController extends Controller
+class AuthController extends Controller
 {
+
     public function Login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -79,6 +80,4 @@ class ApiController extends Controller
             return response()->json($response, 400);
         }
     }
-
-
 }
