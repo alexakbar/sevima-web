@@ -22,6 +22,7 @@ Route::group(['prefix' => 'v1'], function () {
     ], function () {
       Route::group(['as' => 'post.', 'prefix' => '/post'], function () {
         Route::get('/', 'API\Post\PostController@index')->name('index');
+        Route::get('/{id}', 'API\Post\PostController@postByID')->name('postByID');
         Route::post('/store', 'API\Post\PostController@store')->name('created');
         Route::post('/edit/{id}', 'API\Post\PostController@edit')->name('edit');
         Route::post('/update/{id}', 'API\Post\PostController@update')->name('update');
@@ -37,7 +38,7 @@ Route::group(['prefix' => 'v1'], function () {
       Route::group(['as' => 'profile.', 'prefix' => '/profile'], function () {
         Route::get('/', 'API\Profile\ProfileController@Profile')->name('profile');
         Route::get('/gallery', 'API\Profile\ProfileController@Gallery')->name('gallery');
-        Route::get('/gallery-horizontal', 'API\Profile\ProfileController@GalleryHorizontal')->name('galleryHorizontal');
+        Route::get('/gallery-vertical', 'API\Profile\ProfileController@GalleryVertical')->name('galleryVertical');
       });
   });
 });

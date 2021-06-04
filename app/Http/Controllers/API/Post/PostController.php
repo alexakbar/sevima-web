@@ -19,18 +19,28 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-      $posts = Post::get();
+      $posts = Post::orderBy('created_at','DESC')->get();
       $data = [];
       foreach ($posts as $key => $post) {
-        $like = Like::where('user_id',"!=",$post->user_id)->where('post_id',$post->id)->orderBy('created_at','DESC')->limit(2)->get();
+        $likes = Like::where('post_id',$post->id)->orderBy('created_at','DESC')->limit(2)->get();
+        $isLike = Like::where('user_id',$request->user()->id)->where('post_id',$post->id)->first();
+        $dataLike = [];
+        foreach ($likes as $key => $like) {
+          $dataLike[] = $like->user;
+        }
         $comment = Comment::where('post_id',$post->id)->with('user')->orderBy('created_at','DESC')->limit(2)->get();
         $data[] = array(
+          'id' => $post->id,
           'image' => $post->image,
           'text' => $post->text,
+          'is_turn_of_comment' => $post->is_turn_of_comment,
+          'is_turn_of_like' => $post->is_turn_of_like,
+          'is_like' => $isLike ? true : false,
           'total_like' => $post->like->count(),
-          'likers' => $like,
+          'likers' => $dataLike,
           'total_comment' => $post->comment->count(),
           'comment' => $comment,
+          'user' => $post->user
         );
       }
 
@@ -158,16 +168,27 @@ class PostController extends Controller
         ]);
 
         if ($validator->passes()) {
-          $post =  new Like();
-          $post->user_id = $request->user()->id;
-          $post->post_id = $request->post_id;
 
-          if ($post->save()) {
+          $checkingLike = Like::where('user_id',$request->user()->id)->where('post_id',$request->post_id)->first();
+          if ($checkingLike) {
             $response['error'] = false;
             $response['message'] = "Success";
 
             return response()->json($response, 200);
+          }else{
+            $post =  new Like();
+            $post->user_id = $request->user()->id;
+            $post->post_id = $request->post_id;
+
+
+            if ($post->save()) {
+              $response['error'] = false;
+              $response['message'] = "Success";
+
+              return response()->json($response, 200);
+            }
           }
+
         }else{
           $response['error'] = true;
           $response['message'] = "Please check your request";
@@ -183,13 +204,21 @@ class PostController extends Controller
 
         if ($validator->passes()) {
           $post =  Like::where('post_id',$request->post_id)->where('user_id',$request->user()->id)->first();
-
-          if ($post->delete()) {
+          if (!$post) {
             $response['error'] = false;
             $response['message'] = "Success";
 
             return response()->json($response, 200);
+          }else{
+            if ($post->delete()) {
+              $response['error'] = false;
+              $response['message'] = "Success";
+
+              return response()->json($response, 200);
+            }
           }
+
+
         }else{
           $response['error'] = true;
           $response['message'] = "Please check your request";
@@ -282,6 +311,37 @@ class PostController extends Controller
           $response['message'] = "Please check your request";
           return response()->json($response, 400);
         }
+    }
+
+    public function postByID(Request $request,$id)
+    {
+      $post= Post::find($id);
+
+      $likes = Like::where('post_id',$post->id)->orderBy('created_at','DESC')->limit(2)->get();
+      $isLike = Like::where('user_id',$request->user()->id)->where('post_id',$post->id)->first();
+      $dataLike = [];
+      foreach ($likes as $key => $like) {
+        $dataLike[] = $like->user;
+      }
+      $comment = Comment::where('post_id',$post->id)->with('user')->orderBy('created_at','DESC')->limit(2)->get();
+      $data= array(
+        'id' => $post->id,
+        'image' => $post->image,
+        'text' => $post->text,
+        'is_turn_of_comment' => $post->is_turn_of_comment,
+        'is_turn_of_like' => $post->is_turn_of_like,
+        'total_like' => $post->like->count(),
+        'likers' => $dataLike,
+        'is_like' => $isLike ? true : false,
+        'total_comment' => $post->comment->count(),
+        'comment' => $comment,
+        'user' => $post->user
+      );
+
+      $response['data'] = $data;
+      $response['error'] = false;
+      $response['message'] = "Success";
+      return response()->json($response, 200);
     }
 
     function is_file_exists($file)

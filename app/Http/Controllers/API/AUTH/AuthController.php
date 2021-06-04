@@ -72,12 +72,13 @@ class AuthController extends Controller
           $user->password = Hash::make($request->password);
 
           if ($user->save()) {
+            Hash::check($user->password, $user->password);
             $response['data'] = $user;
             $response['error'] = false;
+            $response['token'] =  $response['data']->createToken('Token')->accessToken;
             $response['message'] = "Success create an account";
             return response()->json($response, 200);
           }
-
         } else {
             $response['error'] = true;
             $response['message'] = "Please check your field";
