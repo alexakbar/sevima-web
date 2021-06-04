@@ -41,6 +41,16 @@ class User extends Authenticatable
 
     public function post()
     {
-        return $this->hasMany('App\Entities\Post', 'id');
+        return $this->hasMany('App\Entities\Post', 'user_id');
+    }
+
+    public function like()
+    {
+        return $this->hasMany('App\Entities\Like', 'user_id','id');
+    }
+
+    public function comment()
+    {
+        return $this->hasMany('App\Entities\Comment', 'user_id','id');
     }
 }

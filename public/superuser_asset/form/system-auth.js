@@ -54,7 +54,7 @@ $('#form-login').submit(function(e) {
         if (response.status) {
           console.log(response.status);
           setTimeout(function() {
-            ((response.status) ? redirect(base_url+'/superuser') : redirect(base_url+'/login'))
+            ((response.status) ? redirect(base_url+'/superadmin') : redirect(base_url+'/login'))
 
           }, time += 0);
         }else{

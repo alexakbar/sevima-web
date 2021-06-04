@@ -20,3 +20,7 @@ Route::get('/', function () {
 Route::get('/login', 'Website\Auth\AuthController@index')->name('auth.index');
 Route::post('/auth', 'Website\Auth\AuthController@dologin')->name('dologin');
 Route::get('/logout', 'Website\Auth\AuthController@logout')->name('logout');
+
+Route::group(['as' => 'superadmin.', 'prefix' => '/superadmin'], function () {
+    Route::get('/', 'SuperAdmin\Dashboard\DashboardController@index')->name('index');
+});

@@ -14,7 +14,7 @@
 	<link href="{{asset('superuser_asset/assets/css/layout.min.css')}}" rel="stylesheet" type="text/css">
 	<link href="{{asset('superuser_asset/assets/css/components.min.css')}}" rel="stylesheet" type="text/css">
 	<link href="{{asset('superuser_asset/assets/css/colors.min.css')}}" rel="stylesheet" type="text/css">
-	
+	<link rel="shortcut icon" href="{{asset('assets/img/favicon.png')}}">
 	<link href="{{ asset('superuser_asset/assets/plugins/toastr/toastr.min.css') }}" rel="stylesheet" type="text/css" />
 
 	<!-- /global stylesheets -->
