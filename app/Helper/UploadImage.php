@@ -15,9 +15,7 @@ class UploadImage
             } else {
                 Self::$file_name = $filename;
             }
-
             $image->move(public_path($path), Self::$file_name);
-
             return $path.Self::$file_name;
         }
     }
@@ -36,7 +34,6 @@ class UploadImage
         if ($finish_string) {
             $string .= $finish_string;
         }
-
         return $string;
     }
 }
